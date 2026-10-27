@@ -44,6 +44,6 @@ input: 12.3k  output: 4.5k  cache hit: 1.2M  cost: $0.42
 - **cache hit**: input tokens the latest turn read from the prompt cache
 - **cost**: this session's total estimated cost in US dollars
 
-Each section of the first row is colored by its usage: under 25% green, 25–55% blue, 55–75% orange, 75–100% a rainbow gradient.
+Each section of the first row is colored by its usage: under 25% green, 25–55% blue, 55–75% orange, 75–100% a rainbow gradient that runs red to violet once across the section.
 
 The numbers come from Claude's own rate-limit readings, so no token or setup is needed. They appear after the first API response of a session, and the rate-limit sections need a Claude subscription (Pro/Max).

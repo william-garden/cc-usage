@@ -11,7 +11,19 @@ const costUsd = atom({ plugin: 'cc-usage', key: 'costUsd' } as const, null as nu
 const GREEN = '#22c55e'
 const BLUE = '#3b82f6'
 const ORANGE = '#f97316'
-const RAINBOW = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#3b82f6', '#8b5cf6', '#ec4899']
+
+// 色相 0..360、饱和度/亮度 0..1 转成 #rrggbb
+const hsl = (h: number, s: number, l: number) => {
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12
+    const c = l - s * Math.min(l, 1 - l) * Math.max(-1, Math.min(k - 3, 9 - k, 1))
+    return Math.round(c * 255).toString(16).padStart(2, '0')
+  }
+  return `#${f(0)}${f(8)}${f(4)}`
+}
+
+// 一段文字从头到尾走完一遍红→紫的七彩，不重复
+const rainbowAt = (i: number, n: number) => hsl(n > 1 ? (280 * i) / (n - 1) : 0, 0.85, 0.6)
 
 // 25% 以下绿色，25%-55% 蓝色，55%-75% 橙色，75% 以上七彩渐变
 const colorFor = (pct: number) => (pct < 25 ? GREEN : pct < 55 ? BLUE : pct < 75 ? ORANGE : null)
@@ -88,8 +100,8 @@ export const register: Register = on => {
       if (color) return <Text key={key} color={color}>{text}</Text>
       return (
         <Text key={key}>
-          {[...text].map((ch, i) => (
-            <Text key={String(i)} color={RAINBOW[i % RAINBOW.length]}>{ch}</Text>
+          {[...text].map((ch, i, all) => (
+            <Text key={String(i)} color={rainbowAt(i, all.length)}>{ch}</Text>
           ))}
         </Text>
       )
