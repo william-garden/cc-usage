@@ -4,13 +4,18 @@ A Claude Code mod that shows your current usage right-aligned above the prompt b
 
 ```
 context: 25%     5hs: 30% ( 2h30ms )     weekly: (2d10h)
+input: 12.3k     output: 4.5k     cache hit: 1.2M     cost: $0.42
 ```
 
 - **context**: how full the current context window is
 - **5hs**: 5-hour rate-limit usage and time until it resets
 - **weekly**: time until the weekly limit resets (the color reflects weekly usage)
 
-Each section is colored by its usage: under 25% green, 25–55% blue, 55–75% orange, 75–100% a rainbow gradient.
+- **input / output**: this session's uncached input tokens and output tokens, summed over every turn (subagents included)
+- **cache hit**: input tokens read from the prompt cache this session
+- **cost**: this session's estimated cost in US dollars
+
+Each section of the first row is colored by its usage: under 25% green, 25–55% blue, 55–75% orange, 75–100% a rainbow gradient.
 
 The numbers come from Claude's own rate-limit readings, so no token or setup is needed. They appear after the first API response of a session, and the rate-limit sections need a Claude subscription (Pro/Max).
 
