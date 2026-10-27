@@ -22,8 +22,12 @@ const hsl = (h: number, s: number, l: number) => {
   return `#${f(0)}${f(8)}${f(4)}`
 }
 
-// 一段文字从头到尾走完一遍红→紫的七彩，不重复
-const rainbowAt = (i: number, n: number) => hsl(n > 1 ? (280 * i) / (n - 1) : 0, 0.85, 0.6)
+// 一段文字从头到尾走完一遍红→紫的七彩，不重复；最后的蓝、紫两段亮度提高 10%
+const rainbowAt = (i: number, n: number) => {
+  const h = n > 1 ? (280 * i) / (n - 1) : 0
+  const lift = Math.max(0, Math.min(1, (h - 180) / 40)) * 0.1
+  return hsl(h, 0.85, 0.6 + lift)
+}
 
 // 25% 以下绿色，25%-55% 蓝色，55%-75% 橙色，75% 以上七彩渐变
 const colorFor = (pct: number) => (pct < 25 ? GREEN : pct < 55 ? BLUE : pct < 75 ? ORANGE : null)

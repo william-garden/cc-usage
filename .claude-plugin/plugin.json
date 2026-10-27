@@ -1,6 +1,6 @@
 {
   "name": "cc-usage",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "description": "在 Claude 提示框上方显示上下文、5 小时、每周额度，以及本会话的 token 用量和花费",
   "types": "./types/index.d.ts"
