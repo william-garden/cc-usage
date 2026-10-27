@@ -2,6 +2,8 @@
 
 A Claude Code mod that shows your current usage right-aligned above the prompt box.
 
+![cc-usage above the prompt box](assets/screenshot.png)
+
 ## Install
 
 From a shell:
@@ -28,8 +30,6 @@ claude plugin update cc-usage@cc-usage
 ```
 
 ## What it shows
-
-![cc-usage above the prompt box](assets/screenshot.png)
 
 ```
 context: 25%  5hs: 30% ( 2h30ms )  weekly: (2d10h)
