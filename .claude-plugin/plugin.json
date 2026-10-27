@@ -1,0 +1,7 @@
+{
+  "name": "cc-usage",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "在 Claude 提示框上方显示上下文、5 小时和每周额度用量",
+  "types": "./types/index.d.ts"
+}

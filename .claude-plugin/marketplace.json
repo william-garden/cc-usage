@@ -1,0 +1,5 @@
+{
+  "name": "cc-usage",
+  "owner": { "name": "william-garden" },
+  "plugins": [{ "name": "cc-usage", "source": "./" }]
+}
