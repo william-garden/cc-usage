@@ -55,16 +55,16 @@ export const register: Register = on => {
     return next(e)
   })
 
-  // 每轮（含子代理的轮次）结束时累加本会话的 token
+  // 只显示主对话最近一轮的 token，不累加；子代理的轮次不覆盖它
   on('turn.complete', async ($, e, next) => {
     const result = await next(e)
     const usage = result.usage ?? e.usage
-    if (usage) {
-      await update($, tokens, t => ({
-        input: t.input + usage.input_tokens,
-        output: t.output + usage.output_tokens,
-        cacheRead: t.cacheRead + usage.cache_read_input_tokens,
-        cacheWrite: t.cacheWrite + usage.cache_creation_input_tokens,
+    if (usage && !e.agentId) {
+      await update($, tokens, () => ({
+        input: usage.input_tokens,
+        output: usage.output_tokens,
+        cacheRead: usage.cache_read_input_tokens,
+        cacheWrite: usage.cache_creation_input_tokens,
       }))
     }
     return result

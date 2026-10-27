@@ -11,8 +11,8 @@ input: 12.3k     output: 4.5k     cache hit: 1.2M     cost: $0.42
 - **5hs**: 5-hour rate-limit usage and time until it resets
 - **weekly**: time until the weekly limit resets (the color reflects weekly usage)
 
-- **input / output**: this session's uncached input tokens and output tokens, summed over every turn (subagents included)
-- **cache hit**: input tokens read from the prompt cache this session
+- **input / output**: the latest turn's uncached input tokens and output tokens (not summed across turns)
+- **cache hit**: input tokens the latest turn read from the prompt cache
 - **cost**: this session's estimated cost in US dollars
 
 Each section of the first row is colored by its usage: under 25% green, 25–55% blue, 55–75% orange, 75–100% a rainbow gradient.
