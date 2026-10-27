@@ -3,8 +3,8 @@
 A Claude Code mod that shows your current usage right-aligned above the prompt box:
 
 ```
-context: 25%     5hs: 30% ( 2h30ms )     weekly: (2d10h)
-input: 12.3k     output: 4.5k     cache hit: 1.2M     cost: $0.42
+context: 25%  5hs: 30% ( 2h30ms )  weekly: (2d10h)
+input: 12.3k  output: 4.5k  cache hit: 1.2M  cost: $0.42
 ```
 
 - **context**: how full the current context window is
@@ -13,7 +13,7 @@ input: 12.3k     output: 4.5k     cache hit: 1.2M     cost: $0.42
 
 - **input / output**: the latest turn's uncached input tokens and output tokens (not summed across turns)
 - **cache hit**: input tokens the latest turn read from the prompt cache
-- **cost**: this session's estimated cost in US dollars
+- **cost**: the latest turn's estimated cost in US dollars (subagents it ran included)
 
 Each section of the first row is colored by its usage: under 25% green, 25–55% blue, 55–75% orange, 75–100% a rainbow gradient.
 

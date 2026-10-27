@@ -8,7 +8,8 @@ declare module 'claude-code' {
       limits: Quota[]
       contextPercent: number | null
       tokens: Tokens
-      costUsd: number | null
+      turnCost: number | null
+      costBase: number | null
     }
   }
 }

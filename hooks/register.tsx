@@ -1,12 +1,14 @@
 import { atom, read, update } from 'claude-code'
-import type { Register, EngineInterface, SessionContextUsage, SessionCost, SessionRateLimit } from 'claude-code'
+import type { Register, EngineInterface, SessionContextUsage, SessionRateLimit } from 'claude-code'
 
 import type { Quota, Tokens } from '../types'
 
 const limits = atom({ plugin: 'cc-usage', key: 'limits' } as const, [] as Quota[])
 const contextPercent = atom({ plugin: 'cc-usage', key: 'contextPercent' } as const, null as number | null)
 const tokens = atom({ plugin: 'cc-usage', key: 'tokens' } as const, { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 } as Tokens)
-const costUsd = atom({ plugin: 'cc-usage', key: 'costUsd' } as const, null as number | null)
+const turnCost = atom({ plugin: 'cc-usage', key: 'turnCost' } as const, null as number | null)
+// 上一轮结束时会话的累计花费，用来算出最近一轮的花费
+const costBase = atom({ plugin: 'cc-usage', key: 'costBase' } as const, null as number | null)
 
 const GREEN = '#22c55e'
 const BLUE = '#3b82f6'
@@ -31,35 +33,39 @@ const duration = (iso: string | undefined, now: number) => {
 const compact = (n: number) =>
   n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : String(n)
 
-const save = async (
-  $: EngineInterface,
-  context: SessionContextUsage,
-  rateLimits: SessionRateLimit[],
-  cost: SessionCost | undefined,
-) => {
+const save = async ($: EngineInterface, context: SessionContextUsage, rateLimits: SessionRateLimit[]) => {
   await update($, limits, () => rateLimits.map(r => ({ ...r })))
   await update($, contextPercent, () => context.percent ?? null)
-  await update($, costUsd, () => cost?.usd ?? null)
 }
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     const result = await next(e)
     const { context, rateLimits, cost } = await $.session.usage()
-    await save($, context, rateLimits, cost)
+    await save($, context, rateLimits)
+    await update($, costBase, base => base ?? cost?.usd ?? 0)
     return result
   })
 
   on('session.measure', async ($, e, next) => {
-    await save($, e.context, e.rateLimits, e.cost)
+    await save($, e.context, e.rateLimits)
     return next(e)
   })
 
-  // 只显示主对话最近一轮的 token，不累加；子代理的轮次不覆盖它
+  // 只显示主对话最近一轮的 token 和花费，不累加；子代理的轮次不覆盖它
   on('turn.complete', async ($, e, next) => {
     const result = await next(e)
+    if (e.agentId) return result
+
+    const total = (await $.session.usage()).cost?.usd
+    if (total !== undefined) {
+      const base = (await read($, costBase)) ?? 0
+      await update($, turnCost, () => Math.max(0, total - base))
+      await update($, costBase, () => total)
+    }
+
     const usage = result.usage ?? e.usage
-    if (usage && !e.agentId) {
+    if (usage) {
       await update($, tokens, () => ({
         input: usage.input_tokens,
         output: usage.output_tokens,
@@ -78,7 +84,7 @@ export const register: Register = on => {
     const quotas = await read($, limits)
     const ctx = await read($, contextPercent)
     const t = await read($, tokens)
-    const cost = await read($, costUsd)
+    const cost = await read($, turnCost)
 
     const colored = (text: string, pct: number | null, key: string) => {
       if (pct === null) return <Text key={key} dimColor>{text}</Text>
@@ -111,12 +117,12 @@ export const register: Register = on => {
 
     return (
       <Box flexDirection="column" width="100%">
-        <Box flexDirection="row" justifyContent="flex-end" width="100%" gap={5}>
+        <Box flexDirection="row" justifyContent="flex-end" width="100%" gap={2}>
           {colored(ctx === null ? 'context: --' : `context: ${ctx}%`, ctx, 'context')}
           {quotaText('5hs', 'five_hour', true, ' ')}
           {quotaText('weekly', 'seven_day', false, '')}
         </Box>
-        <Box flexDirection="row" justifyContent="flex-end" width="100%" gap={5}>
+        <Box flexDirection="row" justifyContent="flex-end" width="100%" gap={2}>
           {stat('input', compact(t.input))}
           {stat('output', compact(t.output))}
           {stat('cache hit', compact(t.cacheRead))}
