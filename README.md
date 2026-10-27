@@ -1,5 +1,7 @@
 # cc-usage
 
+English | [简体中文](README_zh.md)
+
 A Claude Code mod that shows your current usage right-aligned above the prompt box.
 
 ![cc-usage above the prompt box](assets/screenshot.png)
