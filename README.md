@@ -34,7 +34,7 @@ claude plugin update cc-usage@cc-usage
 ## What it shows
 
 ```
-context: 25%  5hs: 30% ( 2h30ms )  weekly: 12% (2d10h)
+context: 25%  5hs: 30% ( 2h30m )  weekly: 12% (2d10h)
 input: 12.3k  output: 4.5k  cache hit: 1.2M  cost: $0.42
 ```
 

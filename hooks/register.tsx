@@ -40,7 +40,7 @@ const duration = (iso: string | undefined, now: number) => {
   const d = Math.floor(mins / 1440)
   const h = Math.floor((mins % 1440) / 60)
   const m = mins % 60
-  return d > 0 ? `${d}d${h}h` : h > 0 ? `${h}h${m}ms` : `${m}ms`
+  return d > 0 ? `${d}d${h}h` : h > 0 ? `${h}h${m}m` : `${m}m`
 }
 
 // 1234 -> 1.2k, 1234567 -> 1.2M
