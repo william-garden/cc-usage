@@ -132,7 +132,7 @@ export const register: Register = on => {
         <Box flexDirection="row" justifyContent="flex-end" width="100%" gap={2}>
           {colored(ctx === null ? 'context: --' : `context: ${ctx}%`, ctx, 'context')}
           {quotaText('5hs', 'five_hour', true, ' ')}
-          {quotaText('weekly', 'seven_day', false, '')}
+          {quotaText('weekly', 'seven_day', true, '')}
         </Box>
         <Box flexDirection="row" justifyContent="flex-end" width="100%" gap={2}>
           {stat('input', compact(t.input))}

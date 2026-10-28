@@ -34,13 +34,13 @@ claude plugin update cc-usage@cc-usage
 ## 显示内容
 
 ```
-context: 25%  5hs: 30% ( 2h30ms )  weekly: (2d10h)
+context: 25%  5hs: 30% ( 2h30ms )  weekly: 12% (2d10h)
 input: 12.3k  output: 4.5k  cache hit: 1.2M  cost: $0.42
 ```
 
 - **context**：当前上下文窗口的占用比例
 - **5hs**：5 小时额度的用量，以及距离重置的剩余时间
-- **weekly**：距离每周额度重置的剩余时间（颜色反映每周额度的用量）
+- **weekly**：每周额度的用量，以及距离重置的剩余时间
 
 - **input / output**：最近一轮的输入 token（不含缓存命中）和输出 token，不跨轮累加
 - **cache hit**：最近一轮从提示缓存中读取的 token 数

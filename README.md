@@ -34,13 +34,13 @@ claude plugin update cc-usage@cc-usage
 ## What it shows
 
 ```
-context: 25%  5hs: 30% ( 2h30ms )  weekly: (2d10h)
+context: 25%  5hs: 30% ( 2h30ms )  weekly: 12% (2d10h)
 input: 12.3k  output: 4.5k  cache hit: 1.2M  cost: $0.42
 ```
 
 - **context**: how full the current context window is
 - **5hs**: 5-hour rate-limit usage and time until it resets
-- **weekly**: time until the weekly limit resets (the color reflects weekly usage)
+- **weekly**: weekly rate-limit usage and time until it resets
 
 - **input / output**: the latest turn's uncached input tokens and output tokens (not summed across turns)
 - **cache hit**: input tokens the latest turn read from the prompt cache
